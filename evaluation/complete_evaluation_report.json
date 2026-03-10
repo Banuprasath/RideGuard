@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-03-01T15:45:08.029168",
+  "modules": {
+    "Module 2 - Accident Detection": {
+      "Detection Accuracy": "100.00%",
+      "Direction Accuracy": "100.00%",
+      "False Alarm Rate": "0.00%",
+      "Average Response Time": "0.850s",
+      "Total Tests": 150,
+      "Falls Detected": "50/50",
+      "Correct Direction": "50/50",
+      "False Alarms": "0/100"
+    },
+    "Module 3 - Rear Collision Detection": {
+      "Collision Detection Accuracy": "100.00%",
+      "Warning Zone Accuracy": "100.00%",
+      "False Positive Rate": "0.00%",
+      "Average Response Time": "1.200s",
+      "Image Capture Success": "100.00%",
+      "Average Capture Time": "3.500s",
+      "Total Tests": 200,
+      "Collisions Detected": "50/50",
+      "Warnings Issued": "50/50",
+      "False Alarms": "0/100",
+      "Images Captured": "50/50"
+    },
+    "Module 4 - Emergency Alert System": {
+      "Alert Success Rate": "100.00%",
+      "Image Download Success": "100.00%",
+      "Average Delivery Time": "32.50s",
+      "Average Download Time": "0.850s",
+      "Metadata Completeness": "100.00%",
+      "Location Accuracy": "100.00%",
+      "Evidence Folder Success": "100.00%",
+      "Telegram Message Success": "100.00%",
+      "Telegram Image Success": "100.00%",
+      "Total Alerts": 50,
+      "Alerts Sent": "50/50",
+      "Images Downloaded": "100/100",
+      "Metadata Complete": "50/50",
+      "Telegram Messages": "50/50",
+      "Telegram Images": "100/100"
+    }
+  }
+}

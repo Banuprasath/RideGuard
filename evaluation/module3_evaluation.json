@@ -1,0 +1,1141 @@
+{
+  "timestamp": "2026-03-01T15:45:08.016307",
+  "module": "Rear Collision Detection (Module 3)",
+  "metrics": {
+    "Collision Detection Accuracy": "100.00%",
+    "Warning Zone Accuracy": "100.00%",
+    "False Positive Rate": "0.00%",
+    "Average Response Time": "1.200s",
+    "Image Capture Success": "100.00%",
+    "Average Capture Time": "3.500s",
+    "Total Tests": 200,
+    "Collisions Detected": "50/50",
+    "Warnings Issued": "50/50",
+    "False Alarms": "0/100",
+    "Images Captured": "50/50"
+  },
+  "raw_data": {
+    "collision_zone": {
+      "total": 50,
+      "detected": 50,
+      "response_times": [
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2
+      ]
+    },
+    "warning_zone": {
+      "total": 50,
+      "warned": 50
+    },
+    "safe_zone": {
+      "total": 100,
+      "false_alarms": 0
+    },
+    "image_capture": {
+      "attempts": 50,
+      "success": 50,
+      "capture_times": [
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5
+      ]
+    },
+    "distance_readings": [
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      }
+    ]
+  }
+}

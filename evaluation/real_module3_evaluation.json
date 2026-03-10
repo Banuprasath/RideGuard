@@ -1,0 +1,829 @@
+{
+  "timestamp": "2026-03-01T17:40:08.259207",
+  "module": "Rear Collision Detection (Module 3)",
+  "metrics": {
+    "Collision Detection Accuracy": "92.86%",
+    "Warning Zone Accuracy": "85.71%",
+    "False Positive Rate": "6.85%",
+    "Average Response Time": "0.636s",
+    "Image Capture Success": "97.44%",
+    "Average Capture Time": "0.000s",
+    "Total Tests": 150,
+    "Collisions Detected": "39/42",
+    "Warnings Issued": "30/35",
+    "False Alarms": "5/73",
+    "Images Captured": "38/39"
+  },
+  "raw_data": {
+    "collision_zone": {
+      "total": 42,
+      "detected": 39,
+      "response_times": [
+        0.66,
+        0.56,
+        0.69,
+        0.67,
+        0.56,
+        0.7,
+        0.71,
+        0.61,
+        0.64,
+        0.57,
+        0.55,
+        0.59,
+        0.73,
+        0.6,
+        0.58,
+        0.68,
+        0.6,
+        0.68,
+        0.61,
+        0.55,
+        0.64,
+        0.69,
+        0.56,
+        0.66,
+        0.72,
+        0.72,
+        0.65,
+        0.67,
+        0.57,
+        0.67,
+        0.57,
+        0.71,
+        0.68,
+        0.6,
+        0.67,
+        0.63,
+        0.68,
+        0.6,
+        0.56
+      ]
+    },
+    "warning_zone": {
+      "total": 35,
+      "warned": 30
+    },
+    "safe_zone": {
+      "total": 73,
+      "false_alarms": 5
+    },
+    "image_capture": {
+      "attempts": 39,
+      "success": 38,
+      "capture_times": []
+    },
+    "distance_readings": [
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 14,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 2,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": false
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 9,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": true
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 14,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 9,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 13,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 12,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 13,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 8,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": false
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 8,
+        "zone": "safe",
+        "false_alarm": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 12,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 8,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 8,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": false
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": false
+      },
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": false
+      },
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 12,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": false
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": false
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 12,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 2,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 14,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 10,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 12,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 14,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": true
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 14,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 10,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 8,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 9,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 9,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 14,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 2,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 13,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 9,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 13,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 2,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 13,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 8,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 2,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 14,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 12,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 14,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 14,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 8,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 2,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": false
+      },
+      {
+        "distance": 2,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 13,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 2,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 14,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 12,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 2,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 12,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 13,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 11,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 5,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 12,
+        "zone": "safe",
+        "false_alarm": true
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 12,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 9,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 9,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 10,
+        "zone": "safe",
+        "false_alarm": true
+      },
+      {
+        "distance": 6,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 3,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 4,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 9,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 2,
+        "zone": "collision",
+        "detected": true
+      },
+      {
+        "distance": 15,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 7,
+        "zone": "warning",
+        "warned": true
+      },
+      {
+        "distance": 9,
+        "zone": "safe",
+        "false_alarm": false
+      },
+      {
+        "distance": 10,
+        "zone": "safe",
+        "false_alarm": false
+      }
+    ]
+  }
+}

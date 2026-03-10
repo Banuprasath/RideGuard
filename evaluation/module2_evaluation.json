@@ -1,0 +1,85 @@
+{
+  "timestamp": "2026-03-01T15:45:08.012254",
+  "module": "Accident Detection (Module 2)",
+  "metrics": {
+    "Detection Accuracy": "100.00%",
+    "Direction Accuracy": "100.00%",
+    "False Alarm Rate": "0.00%",
+    "Average Response Time": "0.850s",
+    "Total Tests": 150,
+    "Falls Detected": "50/50",
+    "Correct Direction": "50/50",
+    "False Alarms": "0/100"
+  },
+  "raw_data": {
+    "left_falls": {
+      "total": 25,
+      "detected": 25,
+      "correct_direction": 25,
+      "response_times": [
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "right_falls": {
+      "total": 25,
+      "detected": 25,
+      "correct_direction": 25,
+      "response_times": [
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9
+      ]
+    },
+    "normal_rides": {
+      "total": 100,
+      "false_alarms": 0
+    },
+    "threshold_tests": []
+  }
+}

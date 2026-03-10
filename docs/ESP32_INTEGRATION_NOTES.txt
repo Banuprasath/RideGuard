@@ -1,0 +1,79 @@
+===============================================
+UPDATED: ESP32 WEB SERVER INTEGRATION
+===============================================
+
+CHANGES MADE:
+-------------
+
+1. Added ESP32 IP Configuration:
+   - ESP32_IP = "192.168.137.47"
+   - Update this to match your ESP32-CAM IP
+
+2. Added HTTP Image Download:
+   - load_image_from_esp32(path) - Downloads images via HTTP
+   - get_latest_event() - Gets latest event folder from ESP32
+   - No need for SD card removal!
+
+3. Removed Local File Access:
+   - Removed SD_ROOT folder requirement
+   - All images downloaded from ESP32 directly
+
+===============================================
+HOW IT WORKS NOW:
+===============================================
+
+1. Ultrasonic sensor detects object < 5cm
+   ↓
+2. ⚡ CARLA accident triggered IMMEDIATELY
+   ↓
+3. ESP32-CAM captures 5 photos
+   ↓
+4. Python downloads images via HTTP:
+   - http://192.168.137.47/latest (get event name)
+   - http://192.168.137.47/image?file=/ACCIDENT/event_xxx/img_1.jpg
+   - http://192.168.137.47/image?file=/ACCIDENT/event_xxx/img_5.jpg
+   ↓
+5. Tilt analysis runs (for logging only)
+
+===============================================
+REQUIREMENTS:
+===============================================
+
+✅ ESP32-CAM must have web server running
+✅ ESP32 must be on same WiFi network
+✅ ESP32 must support these endpoints:
+   - /latest - Returns latest event folder name
+   - /image?file=<path> - Returns image file
+
+✅ Python packages:
+   - requests (pip install requests)
+   - opencv-python
+   - numpy
+
+===============================================
+SETUP STEPS:
+===============================================
+
+1. Update ESP32_IP in gpt-intergration.py:
+   ESP32_IP = "YOUR_ESP32_IP_HERE"
+
+2. Ensure ESP32 web server is running
+
+3. Test connection:
+   - Open browser: http://YOUR_ESP32_IP/latest
+   - Should return event folder name
+
+4. Run the system:
+   python gpt-intergration.py
+
+===============================================
+BENEFITS:
+===============================================
+
+✅ No SD card removal needed
+✅ Real-time image access
+✅ Works over WiFi
+✅ Instant CARLA trigger (no 8s delay)
+✅ Tilt analysis runs in background
+
+===============================================
