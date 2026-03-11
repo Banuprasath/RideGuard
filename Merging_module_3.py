@@ -61,6 +61,7 @@ ESP32_STREAM_URL = load_env_var('ESP32_STREAM_URL', 'http://192.168.137.63:81/st
 FALL_FILE = r"d:\CEG-MCA\Semester-4\Final-Year-Project\Module-3-RearRecord\iot-python\fall_status.txt"
 ACCIDENT_TRIGGER_FILE = "accident_trigger.txt"  # Same folder as this script
 WARNING_TRIGGER_FILE = "rear_warning.txt"       # Warning signal file
+HOTSPOT_WARNING_FILE = "hotspot_warning.txt"    # Hotspot warning file
 
 # ================= Global Variables =================
 # Helmet Detection
@@ -230,6 +231,20 @@ def check_warning_trigger():
     except:
         pass
     return False
+
+def check_hotspot_warning():
+    """Check if vehicle is in accident-prone area"""
+    try:
+        if os.path.exists(HOTSPOT_WARNING_FILE):
+            with open(HOTSPOT_WARNING_FILE, "r") as f:
+                content = f.read().strip()
+                if content.startswith("WARNING"):
+                    parts = content.split("|")
+                    if len(parts) == 3:
+                        return True, int(parts[1]), float(parts[2])
+    except:
+        pass
+    return False, 0, 0.0
 
 # ================= CARLA World Class =================
 class World(object):
@@ -680,6 +695,11 @@ class CombinedControl(object):
         # Check proximity warning (non-accident)
         if check_warning_trigger():
             world.hud.notification("⚠️ Rear vehicle very close 🔴", seconds=1.5)
+        
+        # Check hotspot warning (AI/ML feature)
+        is_hotspot, accident_count, distance = check_hotspot_warning()
+        if is_hotspot:
+            world.hud.notification(f"🤖 AI Warning: Accident-prone area ahead!  Drive carefully.", seconds=4.0)
         
         # Check if Telegram alert was sent
         try:
