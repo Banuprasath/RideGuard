@@ -87,9 +87,10 @@ accident_trigger_check_interval = 0.5  # Check every 0.5 seconds
 rear_vehicle = None
 rear_collision_active = False
 rear_collision_start_time = 0
-rear_collision_duration = 2.5  # Extended for better animation
-rear_collision_stage = "NONE"  # APPROACH, IMPACT, FALL
-last_keyboard_direction = None  # Track last arrow key pressed
+rear_collision_duration = 2.5
+rear_collision_stage = "NONE"
+last_keyboard_direction = None
+last_hotspot_notification_time = 0
 
 # ================= Helmet Detection Functions =================
 def init_helmet_detection():
@@ -409,7 +410,7 @@ class CombinedControl(object):
             v = self.world.player.get_velocity()
             self.initial_velocity = math.sqrt(v.x**2 + v.y**2 + v.z**2)
             
-            self.world.hud.notification(f"⚠️ COLLISION! FALLING {side}! ({source}) ⚠️", seconds=5.0)
+            self.world.hud.notification(f"COLLISION! FALLING {side}! ({source})", seconds=5.0)
             print(f"⚠️ ACCIDENT TRIGGERED - FALL {side} - Source: {source}")
             
             # Log evidence ONLY for real accidents (not keyboard tests)
@@ -694,12 +695,14 @@ class CombinedControl(object):
         
         # Check proximity warning (non-accident)
         if check_warning_trigger():
-            world.hud.notification("⚠️ Rear vehicle very close 🔴", seconds=1.5)
+            world.hud.notification("WARNING: Rear vehicle very close!", seconds=1.5)
         
-        # Check hotspot warning (AI/ML feature)
+        # Check hotspot warning (AI/ML feature) - with cooldown to prevent spam
+        global last_hotspot_notification_time
         is_hotspot, accident_count, distance = check_hotspot_warning()
-        if is_hotspot:
-            world.hud.notification(f"🤖 AI Warning: Accident-prone area ahead!  Drive carefully.", seconds=4.0)
+        if is_hotspot and (current_time - last_hotspot_notification_time > 3.0):
+            last_hotspot_notification_time = current_time
+            world.hud.notification("WARNING: Accident-prone area ahead. Drive carefully.", seconds=3.0)
         
         # Check if Telegram alert was sent
         try:
@@ -707,7 +710,7 @@ class CombinedControl(object):
                 with open("telegram_status.txt", "r") as f:
                     content = f.read().strip()
                 if content == "SENT":
-                    world.hud.notification("✅ Emergency alert sent successfully", seconds=5.0)
+                    world.hud.notification("Emergency alert sent successfully", seconds=5.0)
                     # Delete file after reading
                     try:
                         os.remove("telegram_status.txt")
@@ -766,7 +769,7 @@ class CombinedControl(object):
                     rear_collision_stage = "APPROACH"
                     rear_vehicle.apply_control(carla.VehicleControl(throttle=0.5, brake=0.0, steer=0.0))
                     
-                    world.hud.notification("⚠️ HARDWARE ALERT: Accident Detected! Rear Collision Triggered", seconds=4.0)
+                    world.hud.notification("HARDWARE ALERT: Accident Detected! Rear Collision Triggered", seconds=4.0)
                     print("[HARDWARE TRIGGER] Rear collision sequence started")
                     print("="*60 + "\n")
         
@@ -953,7 +956,7 @@ class CombinedControl(object):
                             steer=0.0
                         ))
                         
-                        world.hud.notification("⚠️ Accident Prevention Alarm: Vehicles are too close from behind", seconds=4.0)
+                        world.hud.notification("Accident Prevention Alarm: Vehicles are too close from behind", seconds=4.0)
                         print("[INFO] Rear collision will trigger fall in ~2 seconds")
                         print("="*60 + "\n")
                     else:
