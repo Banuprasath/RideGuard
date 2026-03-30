@@ -86,12 +86,12 @@ import time
 from datetime import datetime
 
 # Configuration
-SERIAL_PORT = 'COM17'           # Change to your actual ESP8266/NodeMCU COM port
+SERIAL_PORT = 'COM20'           # Change to your actual ESP8266/NodeMCU COM port
 BAUD_RATE = 9600                # Match your NodeMCU baud rate
-OUTPUT_FILE = '../fall_status.txt' # File that CARLA will read (parent directory)
+OUTPUT_FILE = r'd:\CEG-MCA\Semester-4\Final-Year-Project\Module-4-Emergency-Alert\Live_location\fall_status.txt'
 
 # Stability filter settings - REDUCED for faster response to small tilts
-STABILITY_THRESHOLD = 5         # Reduced from 7 to 3 for faster tilt detection
+STABILITY_THRESHOLD = 3         # Reduced for faster tilt detection
 DEBOUNCE_TIME = 0.1            # Minimum time between state changes (seconds)
 
 # State tracking

@@ -58,7 +58,7 @@ def load_env_var(var_name, default_value):
     return default_value
 
 ESP32_STREAM_URL = load_env_var('ESP32_STREAM_URL', 'http://192.168.137.63:81/stream')
-FALL_FILE = r"d:\CEG-MCA\Semester-4\Final-Year-Project\Module-3-RearRecord\iot-python\fall_status.txt"
+FALL_FILE = r"d:\CEG-MCA\Semester-4\Final-Year-Project\Module-4-Emergency-Alert\Live_location\fall_status.txt"
 ACCIDENT_TRIGGER_FILE = "accident_trigger.txt"  # Same folder as this script
 WARNING_TRIGGER_FILE = "rear_warning.txt"       # Warning signal file
 HOTSPOT_WARNING_FILE = "hotspot_warning.txt"    # Hotspot warning file
@@ -72,7 +72,7 @@ model = None
 cap = None
 
 # Simplified detection variables
-confidence_threshold = 0.25  # Very low threshold for maximum detection
+confidence_threshold = 0.50  # Very low threshold for maximum detection
 
 # Tilt Detection
 tilt_status = "NONE"
@@ -91,6 +91,7 @@ rear_collision_duration = 2.5
 rear_collision_stage = "NONE"
 last_keyboard_direction = None
 last_hotspot_notification_time = 0
+hotspot_warning_count = 0
 
 # ================= Helmet Detection Functions =================
 def init_helmet_detection():
@@ -697,11 +698,12 @@ class CombinedControl(object):
         if check_warning_trigger():
             world.hud.notification("WARNING: Rear vehicle very close!", seconds=1.5)
         
-        # Check hotspot warning (AI/ML feature) - with cooldown to prevent spam
-        global last_hotspot_notification_time
+        # Check hotspot warning (AI/ML feature) - show max 2 times per session
+        global last_hotspot_notification_time, hotspot_warning_count
         is_hotspot, accident_count, distance = check_hotspot_warning()
-        if is_hotspot and (current_time - last_hotspot_notification_time > 3.0):
+        if is_hotspot and hotspot_warning_count < 2 and (current_time - last_hotspot_notification_time > 3.0):
             last_hotspot_notification_time = current_time
+            hotspot_warning_count += 1
             world.hud.notification("WARNING: Accident-prone area ahead. Drive carefully.", seconds=3.0)
         
         # Check if Telegram alert was sent
