@@ -1,0 +1,223 @@
+==============================================================
+  MOTORCYCLE ACCIDENT DETECTION SYSTEM
+  Setup Guide for New Machine
+  Final Year Project - MCA Semester 4
+==============================================================
+
+QUICKSTART
+----------
+1. Double-click install.bat  (runs everything automatically)
+2. Follow the on-screen instructions
+3. Manually install CARLA (see Section 3 below)
+4. Update paths and ports (see Section 4 below)
+
+
+==============================================================
+SECTION 1 - WHAT YOU NEED BEFORE STARTING
+==============================================================
+
+  [ ] Python 3.7 installed
+  [ ] Internet connection (for pip installs)
+  [ ] CARLA 0.9.10 downloaded
+  [ ] Project folder copied (with best.pt inside)
+  [ ] Arduino + ESP32 hardware connected (for full run)
+
+
+==============================================================
+SECTION 2 - PYTHON SETUP
+==============================================================
+
+Step 1: Install Python 3.7
+  - Download: https://www.python.org/downloads/release/python-3712/
+  - File: python-3.7.12-amd64.exe
+  - IMPORTANT: Check "Add Python to PATH" during install
+
+Step 2: Open Command Prompt in project folder
+  - Navigate to Live_location folder
+  - Hold Shift + Right Click → "Open PowerShell/CMD here"
+
+Step 3: Run installer
+  - Double-click install.bat
+  OR manually run:
+    pip install -r requirements.txt
+
+
+==============================================================
+SECTION 3 - CARLA SIMULATOR SETUP (MANUAL - REQUIRED)
+==============================================================
+
+Step 1: Download CARLA 0.9.10
+  URL: https://github.com/carla-simulator/carla/releases/tag/0.9.10
+  File to download: CARLA_0.9.10.zip  (WindowsNoEditor version)
+  Size: ~3.5 GB
+
+Step 2: Extract
+  Extract to: C:\CARLA_0.9.10\
+  After extraction you should have:
+    C:\CARLA_0.9.10\WindowsNoEditor\CarlaUE4.exe
+    C:\CARLA_0.9.10\WindowsNoEditor\PythonAPI\carla\dist\
+      carla-0.9.10-py3.7-win-amd64.egg   ← this file is critical
+
+Step 3: Update path in Merging_module_3.py
+  Open Merging_module_3.py
+  Find line 21 (sys.path.append)
+  Change to match your CARLA install location:
+
+    sys.path.append(
+        r"C:\CARLA_0.9.10\WindowsNoEditor\PythonAPI\carla\dist\carla-0.9.10-py3.7-win-amd64.egg"
+    )
+
+
+==============================================================
+SECTION 4 - HARDCODED PATHS TO UPDATE
+==============================================================
+
+FILE: Merging_module_3.py
+
+  Line 21 - CARLA egg path:
+    Change: r"D:\softwares\CARLA_0.9.10\..."
+    To:     r"C:\CARLA_0.9.10\..."   (your CARLA location)
+
+  Line 57 - FALL_FILE path:
+    Change: r"d:\CEG-MCA\...\fall_status.txt"
+    To:     r"C:\your\project\path\Live_location\fall_status.txt"
+
+FILE: Rear_Location.py
+
+  Inside run() method - fall_status.txt read:
+    Change: r"d:\CEG-MCA\...\Module-3-RearRecord\iot-python\fall_status.txt"
+    To:     r"C:\your\project\path\Live_location\fall_status.txt"
+
+
+==============================================================
+SECTION 5 - .ENV CONFIGURATION
+==============================================================
+
+Open .env file and update:
+
+  ARDUINO_PORT = COM??
+    How to find: Device Manager > Ports (COM & LPT)
+                 Look for "USB Serial Device" or "Arduino"
+                 Note the COM number (e.g., COM5, COM8)
+
+  ESP32_PORT = COM??
+    How to find: Same as above, second COM port
+
+  ESP32_IP = 192.168.x.x
+    How to find: Connect ESP32-CAM to your mobile hotspot
+                 Check connected devices in hotspot settings
+                 Or check Serial Monitor output from ESP32
+
+  These values stay the same (no change needed):
+    TELEGRAM_BOT_TOKEN
+    TELEGRAM_CHAT_ID
+    USER_NAME
+    VEHICLE_NUMBER
+    All threshold values
+
+
+==============================================================
+SECTION 6 - PROJECT FILES CHECKLIST
+==============================================================
+
+Make sure these files exist in Live_location folder:
+
+  REQUIRED (must copy from original laptop):
+  [ ] best.pt                  YOLOv8 trained model weights
+  [ ] accidents.csv            Chennai accident GPS data
+  [ ] .env                     All configuration values
+  [ ] Merging_module_3.py      Main CARLA script
+  [ ] Rear_Location.py         Hardware bridge script
+  [ ] emergency_alert.py       Telegram alert script
+  [ ] hotspot_detector.py      DBSCAN hotspot script
+
+  AUTO-CREATED by install.bat:
+  [ ] fall_status.txt
+  [ ] accident_trigger.txt
+  [ ] rear_warning.txt
+  [ ] hotspot_warning.txt
+  [ ] gps_log.txt
+  [ ] latest_event.txt
+
+  DELETE before first run (will regenerate):
+  [ ] hotspot_cache.json       (delete this if it exists)
+
+
+==============================================================
+SECTION 7 - HOW TO RUN THE PROJECT
+==============================================================
+
+Open 4 separate Command Prompt windows:
+
+  Terminal 1 - CARLA Server (start this FIRST):
+    cd C:\CARLA_0.9.10\WindowsNoEditor
+    CarlaUE4.exe
+
+  Terminal 2 - Main System (wait for CARLA to load):
+    cd C:\your\path\Live_location
+    python Merging_module_3.py
+
+  Terminal 3 - Hardware Bridge:
+    cd C:\your\path\Live_location
+    python Rear_Location.py
+
+  Terminal 4 - Hotspot Monitor (optional):
+    cd C:\your\path\Live_location
+    python hotspot_detector.py
+
+  Evaluation Only (no hardware needed):
+    python evaluation\thesis_evaluation.py
+
+
+==============================================================
+SECTION 8 - TROUBLESHOOTING
+==============================================================
+
+Problem: "import carla" fails
+  Fix: Wrong CARLA egg path in Merging_module_3.py line 21
+       Or wrong Python version (must be 3.7)
+
+Problem: "fall_status.txt not found"
+  Fix: Update FALL_FILE path in Merging_module_3.py line 57
+
+Problem: "Could not open port COM16"
+  Fix: Arduino COM port changed. Check Device Manager, update .env
+
+Problem: "Connection refused 127.0.0.1:2000"
+  Fix: CARLA server not running. Start CarlaUE4.exe first
+
+Problem: "best.pt not found"
+  Fix: Copy best.pt file to Live_location folder
+
+Problem: ESP32-CAM images not downloading
+  Fix: ESP32_IP in .env is wrong. Find correct IP from hotspot
+
+Problem: Telegram alert not sending
+  Fix: Check internet connection. TELEGRAM_BOT_TOKEN in .env correct?
+
+Problem: "No module named ultralytics"
+  Fix: Run: pip install ultralytics
+
+
+==============================================================
+SECTION 9 - PYTHON LIBRARIES REFERENCE
+==============================================================
+
+  Library          Purpose
+  ─────────────────────────────────────────────────────
+  ultralytics      YOLOv8 helmet detection model
+  opencv-python    Webcam capture + image processing
+  pygame           CARLA simulation window rendering
+  numpy            Array and math operations
+  requests         ESP32-CAM HTTP + Telegram API calls
+  pyserial         Arduino + ESP32 serial communication
+  pandas           accidents.csv data loading
+  scikit-learn     DBSCAN clustering algorithm
+  matplotlib       Evaluation charts and plots
+  python-dotenv    .env file loading (optional)
+
+
+==============================================================
+  For help contact the project author.
+  Generated for Final Year Project - MCA Semester 4
+==============================================================

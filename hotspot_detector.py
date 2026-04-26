@@ -130,7 +130,7 @@ def load_hotspots():
                 print(f"[HOTSPOT] Loaded {len(data['hotspots'])} hotspots from cache")
                 return data['hotspots']
     except:
-        pass
+          pass
     
     return detect_hotspots()
 

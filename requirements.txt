@@ -1,0 +1,10 @@
+ultralytics
+opencv-python
+pygame
+numpy
+requests
+pyserial
+pandas
+scikit-learn
+matplotlib
+python-dotenv
