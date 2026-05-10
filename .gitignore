@@ -1,4 +1,60 @@
-records
-New-Model
-helmet_training
-best.pt
+# ========================
+# SENSITIVE FILES
+# ========================
+.env
+
+# ========================
+# RUNTIME IPC FILES
+# ========================
+fall_status.txt
+accident_trigger.txt
+rear_warning.txt
+hotspot_warning.txt
+gps_log.txt
+latest_event.txt
+telegram_status.txt
+trigger.txt
+
+# ========================
+# AUTO-GENERATED FILES
+# ========================
+hotspot_cache.json
+hotspot_algorithm_comparison.png
+__pycache__/
+*.pyc
+*.pyo
+
+# ========================
+# EVIDENCE RECORDS (personal data)
+# ========================
+records/
+
+# ========================
+# LOGS
+# ========================
+logs/
+*.log
+
+# ========================
+# OLD / PERSONAL FILES
+# ========================
+old-chat-export.md
+.dist/
+
+# ========================
+# TRAINING DATA (large dataset)
+# ========================
+New-Model/
+helmet_training/
+
+# ========================
+# BASE MODEL (not needed, only used during training)
+# ========================
+yolov8n.pt
+
+# ========================
+# OS FILES
+# ========================
+.DS_Store
+Thumbs.db
+desktop.ini

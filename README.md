@@ -1,329 +1,132 @@
-# Motorcycle Accident Detection System
-### Final Year Project — Code Review Preparation Guide
+<div align="center">
+
+# 🏍️ RideGuard
+### Motorcycle Accident Detection & Emergency Alert System
+
+![Python](https://img.shields.io/badge/Python-3.7-blue?style=for-the-badge&logo=python)
+![YOLOv8](https://img.shields.io/badge/YOLOv8-Ultralytics-purple?style=for-the-badge)
+![CARLA](https://img.shields.io/badge/CARLA-0.9.10-orange?style=for-the-badge)
+![Telegram](https://img.shields.io/badge/Telegram-Bot-2CA5E0?style=for-the-badge&logo=telegram)
+![Arduino](https://img.shields.io/badge/Arduino-IoT-00979D?style=for-the-badge&logo=arduino)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+**Final Year Project — MCA Semester 4**
+
+*A real-time motorcycle accident detection system that combines computer vision, IoT sensors, machine learning, and automated emergency alerts to improve rider safety.*
+
+[Features](#features) • [Architecture](#architecture) • [Modules](#modules) • [Installation](#installation) • [Usage](#usage) • [Evaluation](#evaluation) • [Tech Stack](#tech-stack)
+
+</div>
 
 ---
 
-## PROJECT OVERVIEW
+## Overview
 
-A real-time motorcycle accident detection and emergency alert system that combines
-hardware sensors, computer vision, machine learning, and IoT to detect accidents
-and automatically notify emergency contacts via Telegram.
+RideGuard is an integrated motorcycle safety system that detects accidents in real-time using multiple sensor inputs and immediately notifies emergency contacts via Telegram with GPS location and photographic evidence.
 
----
-
-## FILES AND THEIR ROLES
-
-| File | Role |
-|---|---|
-| `Merging_module_3.py` | CARLA simulation + Helmet Detection + Tilt Detection (MAIN) |
-| `Rear_Location.py` | Hardware bridge — Arduino serial + GPS + ESP32-CAM trigger |
-| `emergency_alert.py` | Evidence logging + Telegram alert sender |
-| `hotspot_detector.py` | DBSCAN clustering + real-time hotspot proximity monitor |
-| `accidents.csv` | 99 historical GPS accident records (Chennai) |
-| `.env` | All configuration values (thresholds, tokens, ports) |
-| `fall_status.txt` | IPC file — MPU6050 writes LEFT/RIGHT/NONE |
-| `accident_trigger.txt` | IPC file — Rear_Location writes ACCIDENT to trigger CARLA |
-| `rear_warning.txt` | IPC file — proximity warning zone signal |
-| `hotspot_warning.txt` | IPC file — DBSCAN monitor writes WARNING |
-| `gps_log.txt` | IPC file — Neo-6M GPS coordinates logged every 15s |
-| `latest_event.txt` | IPC file — ESP32-CAM event folder name |
-| `telegram_status.txt` | IPC file — written SENT after Telegram alert delivered |
+The system is simulated using the **CARLA 0.9.10** autonomous driving simulator and validated with real IoT hardware including Arduino, MPU6050, HC-SR04 ultrasonic sensor, Neo-6M GPS, and ESP32-CAM.
 
 ---
 
-## COMPLETE WORKFLOW — STEP BY STEP
+## Features
+
+- **Helmet Detection** — YOLOv8 detects helmet usage every 5 seconds via webcam. Restricts speed to 30 km/h if no helmet detected
+- **Tilt/Fall Detection** — MPU6050 gyroscope detects motorcycle tilt beyond 10 degrees and triggers fall animation in CARLA
+- **Rear Collision Detection** — HC-SR04 ultrasonic sensor detects rear vehicle proximity. Triggers accident after 3 consecutive readings within 2cm
+- **Accident Hotspot Warning** — DBSCAN clustering on 99 Chennai GPS accident records identifies 6 hotspot zones. Warns rider in real-time when within 2km
+- **Emergency Alert** — Sends Telegram message with rider details, live GPS pin, and ESP32-CAM evidence photos within 20 seconds of accident
+
+---
+
+## Architecture
 
 ```
-STARTUP
-   |
-   |-- Merging_module_3.py starts
-   |     |-- Loads YOLOv8 model (best.pt)
-   |     |-- Opens webcam (640x480, 15fps)
-   |     |-- Connects to CARLA server
-   |     |-- Spawns Yamaha YZF bike + Tesla rear vehicle
-   |
-   |-- Rear_Location.py starts (separate terminal)
-   |     |-- Opens Arduino serial (COM16, 9600 baud)
-   |     |-- Opens ESP32 serial (COM3, 115200 baud)
-   |     |-- Starts reading sensor data loop
-   |
-   |-- hotspot_detector.py starts (background thread)
-         |-- Loads accidents.csv
-         |-- Runs DBSCAN → finds 6 hotspot centroids
-         |-- Saves to hotspot_cache.json
-         |-- Starts monitor thread (checks every 60s)
-
-RUNTIME LOOP (30 FPS in CARLA)
-   |
-   |-- Every 5 seconds:
-   |     check_helmet() → reads webcam frame → YOLOv8 inference
-   |     → updates helmet_ok (True/False)
-   |     → applies speed limit (80% or 35% throttle)
-   |
-   |-- Every 5 seconds:
-   |     read_tilt_status() → reads fall_status.txt
-   |     → if LEFT or RIGHT → trigger_accident(side, "MPU")
-   |
-   |-- Every 0.5 seconds:
-   |     check_accident_trigger() → reads accident_trigger.txt
-   |     → if ACCIDENT → start rear collision sequence in CARLA
-   |
-   |-- Every frame:
-   |     check_warning_trigger() → reads rear_warning.txt → HUD warning
-   |     check_hotspot_warning() → reads hotspot_warning.txt → HUD warning
-   |     check telegram_status.txt → if SENT → show HUD acknowledgment
-
-HARDWARE SIDE (Rear_Location.py loop)
-   |
-   |-- Arduino sends "DIST:XX" every 100ms
-   |     → if distance > 2cm and <= 6cm → write WARNING to rear_warning.txt
-   |     → if distance <= 2cm for 3 consecutive readings:
-   |           write ACCIDENT to accident_trigger.txt
-   |           send CAPTURE command to ESP32-CAM
-   |           wait 5s for images to save
-   |           poll fall_status.txt for MPU direction
-   |           call analyze_tilt() on ESP32 images
-   |
-   |-- Arduino sends "GPS:lat,lng,sats,speed" continuously
-   |     → every 15s → write to gps_log.txt
-
-ACCIDENT TRIGGERED (any source)
-   |
-   |-- trigger_accident(side, source) called
-   |     |-- if source != KEYBOARD:
-   |     |     log_accident_evidence() called
-   |     |     → get_location() → reads gps_log.txt (GPS priority)
-   |     |     → create_evidence_folder() → records/YYYY-MM-DD_HH-MM-SS/
-   |     |     → copy_images_from_esp32() → downloads img_1 to img_5
-   |     |     → create_metadata() → saves metadata.txt
-   |     |     → send_alert_async() → background thread
-   |     |           → wait 8 seconds
-   |     |           → send Telegram text message
-   |     |           → send GPS pin (sendLocation)
-   |     |           → send img_1 + img_5 (REAR_COLLISION only)
-   |     |           → write SENT to telegram_status.txt
-   |     |
-   |     |-- CARLA plays fall animation (3 stages, 3 seconds)
-   |           Stage 1: Impact shock (0-0.6s)
-   |           Stage 2: Tilt 45 degrees (0.6-1.5s)
-   |           Stage 3: Full fall 75 degrees (1.5-3.0s)
+┌─────────────────────────────────────────────────────────────┐
+│                     RIDEGUARD SYSTEM                        │
+├──────────────┬──────────────┬──────────────┬────────────────┤
+│   MODULE 1   │   MODULE 2   │   MODULE 3   │   MODULE 4     │
+│   Helmet     │    Tilt      │    Rear      │   Hotspot      │
+│  Detection   │  Detection   │  Collision   │  Detection     │
+│  (YOLOv8)   │  (MPU6050)   │ (Ultrasonic) │   (DBSCAN)     │
+└──────┬───────┴──────┬───────┴──────┬───────┴───────┬────────┘
+       │              │              │               │
+       └──────────────┴──────────────┴───────────────┘
+                              │
+                    ┌─────────▼─────────┐
+                    │   FILE-BASED IPC  │
+                    │  (Shared .txt     │
+                    │   files between   │
+                    │    processes)     │
+                    └─────────┬─────────┘
+                              │
+              ┌───────────────┼───────────────┐
+              │               │               │
+    ┌─────────▼──────┐ ┌──────▼──────┐ ┌─────▼──────────┐
+    │  CARLA 0.9.10  │ │  MODULE 5   │ │   HUD DISPLAY  │
+    │  Simulation    │ │  Emergency  │ │  (Pygame)      │
+    │  Fall Animation│ │  Alert      │ │                │
+    └────────────────┘ │  (Telegram) │ └────────────────┘
+                       └─────────────┘
 ```
 
 ---
 
-## MODULE 1 — HELMET DETECTION (YOLOv8)
+## Modules
 
-### Important Functions
+### Module 1 — Helmet Detection (YOLOv8)
 
-**`init_helmet_detection()`** — MOST IMPORTANT SETUP
-Loads best.pt YOLOv8 model, opens webcam at 640x480 15fps.
-If camera fails, helmet detection is disabled gracefully without crashing.
+Detects whether the rider is wearing a helmet using a custom-trained YOLOv8 model via laptop webcam.
 
-**`check_helmet()`** — MOST IMPORTANT LOGIC
-Reads one frame from webcam, runs YOLOv8 inference, checks confidence >= 0.50.
-Updates global `helmet_ok` — True if With Helmet detected, False if Without Helmet.
-If no detection at all, keeps previous state (no flip).
+- Model: `best.pt` (custom trained, 2 classes)
+- Classes: `With Helmet` / `Without Helmet`
+- Confidence threshold: `0.50`
+- Check interval: every `5 seconds`
+- Speed enforcement: `80% throttle` with helmet, `35% throttle` without
 
-**`validate_detection(box, conf, class_name)`**
-Simple filter — returns True only if confidence > 0.50 threshold.
-Prevents weak detections from affecting the helmet status.
-
-### YOLOv8 Prediction Pipeline
-
-```
-Step 1 LOAD     → model = YOLO("best.pt")
-                  Loads custom trained weights, 2 classes
-
-Step 2 CAPTURE  → ret, frame = cap.read()
-                  640x480 BGR frame from webcam
-
-Step 3 INFER    → results = model(frame, verbose=False)
-                  YOLOv8 single-pass detection
-                  Returns bounding boxes + class ID + confidence
-
-Step 4 PARSE    → for result in results:
-                      for box in result.boxes:
-                          cls_id = int(box.cls[0])
-                          conf   = float(box.conf[0])
-                          class_name = model.names[cls_id]
-
-Step 5 DECIDE   → if conf >= 0.50:
-                      With Helmet    → helmet_ok = True
-                      Without Helmet → helmet_ok = False
-                  else → keep previous state
-
-Step 6 ENFORCE  → if helmet_ok: max_throttle = 0.8  (60 km/h)
-                  else:         max_throttle = 0.35 (30 km/h)
-```
-
-### Evaluation Metrics
 | Metric | Value |
 |---|---|
 | Accuracy | 90.00% |
 | Precision | 88.46% |
 | Recall | 92.00% |
 | F1-Score | 0.9020 |
-| Confidence Threshold | 0.50 |
 
----
+### Module 2 — Tilt Detection (MPU6050)
 
-## MODULE 2 — TILT DETECTION (MPU6050)
+MPU6050 gyroscope sensor measures motorcycle tilt angle. When tilt exceeds 10 degrees, it writes LEFT or RIGHT to a shared file which CARLA reads to trigger a 3-stage fall animation.
 
-### How Data Flows
+- Tilt threshold: `10 degrees`
+- Check interval: `5 seconds`
+- Secondary verification: Sobel edge + image moment analysis on ESP32-CAM images
+- MPU6050 takes priority over camera analysis
 
-```
-MPU6050 sensor (on motorcycle)
-    → measures gyroscope + accelerometer data
-    → Arduino/ESP32 calculates tilt angle
-    → if angle > 10 degrees → writes LEFT or RIGHT to fall_status.txt
-    → if normal → writes NONE
-```
+### Module 3 — Rear Collision Detection (HC-SR04 + ESP32-CAM)
 
-### Important Functions
+HC-SR04 ultrasonic sensor monitors rear vehicle distance. Uses a 3-reading debounce buffer to prevent false triggers.
 
-**`read_tilt_status()`** — MOST IMPORTANT
-Reads fall_status.txt every 5 seconds.
-Accepts only LEFT, RIGHT, NONE — rejects any other value.
-Updates global `tilt_status` variable used by CARLA.
+- Danger zone: `<= 2cm` (3 consecutive readings)
+- Warning zone: `2cm to 6cm`
+- On trigger: writes ACCIDENT to IPC file, sends CAPTURE command to ESP32-CAM
+- ESP32-CAM captures 5 images saved to SD card
 
-**`trigger_accident(side, "MPU")`**
-Called when tilt_status is LEFT or RIGHT.
-Destroys rear Tesla vehicle first (so it doesn't interfere with fall animation).
-Starts 3-stage fall animation in CARLA and triggers evidence logging.
-
-### Threshold Values
-| Parameter | Value | Source |
-|---|---|---|
-| TILT_THRESHOLD | 10 degrees | .env |
-| Check Interval | 5 seconds | tilt_check_interval |
-| Startup Delay | 5 seconds | startup_delay |
-| Camera Tilt Threshold | 15 degrees | Rear_Location.py |
-
-### Camera-Based Tilt Verification (Secondary)
-
-**`get_orientation_angle(img)`**
-Uses Sobel edge detection to find dominant angle in image.
-Formula: angle = arctan(SobelY / SobelX) — finds most common edge direction.
-
-**`detect_rotation(img1, img2)`**
-Compares image moments between two frames to detect rotation.
-Uses central moments mu11, mu20, mu02 to calculate orientation angle.
-
-**`analyze_tilt()`**
-Downloads all 5 images from ESP32-CAM after accident trigger.
-Compares consecutive image pairs for progressive tilt.
-MPU6050 takes priority — camera analysis is secondary confirmation.
-
----
-
-## MODULE 3 — REAR COLLISION DETECTION (Ultrasonic + ESP32-CAM)
-
-### How Data Flows
-
-```
-HC-SR04 Ultrasonic Sensor
-    → TRIG pin sends 10us pulse
-    → ECHO pin measures return time
-    → distance = (time x 343m/s) / 2
-    → Arduino sends "DIST:XX" via serial at 9600 baud
-
-Rear_Location.py reads serial
-    → distance > 2cm and <= 6cm → WARNING zone
-    → distance <= 2cm for 3 readings → ACCIDENT trigger
-```
-
-### Important Functions
-
-**`AccidentSystem.run()`** — MOST IMPORTANT
-Main loop that reads Arduino serial line by line.
-Parses DIST: and GPS: prefixes, handles all threshold logic.
-Uses deque buffer of size 3 (CONFIRM_COUNT) to prevent false triggers.
-
-**`AccidentSystem.trigger_capture()`**
-Sends "CAPTURE\n" command via serial to ESP32-CAM (COM3, 115200 baud).
-ESP32-CAM receives this, captures 5 images, saves to /ACCIDENT/eventname/ on SD card.
-
-**`get_latest_event()`**
-HTTP GET to http://ESP32_IP/latest — returns folder name of latest capture event.
-Used to know which folder to download images from.
-
-**`load_image_from_esp32(path)`**
-HTTP GET to http://ESP32_IP/image?file=/ACCIDENT/event/img_X.jpg
-Downloads image bytes, decodes with cv2.imdecode into numpy array.
-
-### Threshold Logic (Debounce Filter)
-```python
-self.buffer = deque(maxlen=3)       # last 3 readings
-self.buffer.append(distance <= 2)   # True if within threshold
-
-if len(buffer) == 3 and all(buffer):  # 3 consecutive True
-    → ACCIDENT confirmed
-    → write ACCIDENT to accident_trigger.txt
-    → send CAPTURE to ESP32-CAM
-```
-
-### Distance Zones
 | Zone | Distance | Action |
 |---|---|---|
-| Safe | > 6 cm | Clear warning file |
-| Warning | 2-6 cm | Write WARNING to rear_warning.txt |
-| Danger | <= 2 cm | Trigger accident (after 3 confirmations) |
-| Cooldown | 15 seconds | Prevents re-trigger |
+| Safe | > 6cm | No action |
+| Warning | 2–6cm | HUD warning |
+| Danger | <= 2cm (x3) | Accident trigger |
 
----
+### Module 4 — Accident Hotspot Detection (DBSCAN)
 
-## MODULE 4 — ACCIDENT HOTSPOT DETECTION (DBSCAN)
+DBSCAN clustering on 99 GPS accident records from Chennai identifies 6 accident-prone zones. Background thread checks rider GPS every 60 seconds and warns if within 2km of any hotspot.
 
-### Important Functions
+- Algorithm: DBSCAN (Density-Based Spatial Clustering)
+- Dataset: 99 GPS records (Chennai)
+- eps: `0.5km / 6371 = 0.0000785 radians`
+- min_samples: `5`
+- metric: `haversine`
+- Warning radius: `2.0 km`
 
-**`detect_hotspots()`** — MOST IMPORTANT
-Loads accidents.csv, converts coordinates to radians, runs DBSCAN.
-Extracts cluster centroids as hotspot locations, saves to hotspot_cache.json.
-Returns list of hotspot dicts with lat, lng, count, radius.
+**Detected Hotspot Zones:**
 
-**`haversine_distance(lat1, lon1, lat2, lon2)`**
-Calculates real-world distance between two GPS points in kilometers.
-Formula: a = sin²(Δlat/2) + cos(lat1) x cos(lat2) x sin²(Δlon/2)
-Used instead of Euclidean because Earth is curved.
-
-**`check_proximity(current_lat, current_lng, hotspots)`**
-Loops through all hotspot centroids, calculates Haversine distance.
-Returns True + hotspot details if rider is within 2km of any hotspot.
-
-**`HotspotMonitor.check_and_warn()`**
-Reads current GPS from gps_log.txt, calls check_proximity().
-If in hotspot zone → writes WARNING|count|distance to hotspot_warning.txt.
-Has 5-minute cooldown to prevent alert fatigue.
-
-**`load_hotspots()`**
-Checks if hotspot_cache.json exists → loads from cache (fast startup).
-If no cache → calls detect_hotspots() to run DBSCAN fresh.
-
-### DBSCAN Parameters
-| Parameter | Value | Meaning |
-|---|---|---|
-| eps | 0.5km / 6371 = 0.0000785 rad | Neighbourhood radius |
-| min_samples | 5 | Minimum accidents to form hotspot |
-| metric | haversine | GPS-correct distance formula |
-| RISK_RADIUS | 2.0 km | Warning trigger radius |
-| Check Interval | 60 seconds | How often GPS is checked |
-| Cooldown | 300 seconds | 5 min gap between warnings |
-
-### DBSCAN Concepts
-- **Core Point** — Has >= 5 accidents within 0.5km radius → forms hotspot center
-- **Border Point** — Within 0.5km of core point but fewer than 5 neighbours
-- **Noise Point** — Isolated accident, labeled -1, ignored by system
-
-### Evaluation Results
-| Metric | Value |
-|---|---|
-| Total Records | 99 |
-| Hotspots Detected | 6 |
-| Silhouette Score | 0.9879 |
-| Davies-Bouldin Index | 0.0165 |
-| Calinski-Harabasz | 395534.21 |
-
-### 6 Detected Hotspot Zones (Chennai)
 | # | Area | Accidents |
 |---|---|---|
 | 1 | Koyambedu Junction | 18 |
@@ -333,225 +136,254 @@ If no cache → calls detect_hotspots() to run DBSCAN fresh.
 | 5 | Anna Salai (Gemini) | 18 |
 | 6 | Tambaram Bypass | 7 |
 
----
+| Clustering Metric | Value |
+|---|---|
+| Silhouette Score | 0.9879 |
+| Davies-Bouldin Index | 0.0165 |
+| Calinski-Harabasz | 395534.21 |
 
-## MODULE 5 — EMERGENCY ALERT SYSTEM (Telegram)
+### Module 5 — Emergency Alert System (Telegram)
 
-### Important Functions
+On any accident trigger, collects GPS location, ESP32-CAM images, and rider details. Sends Telegram alert within 18–21 seconds.
 
-**`log_accident_evidence(carla_transform, trigger_source, esp32_event_name)`** — MOST IMPORTANT
-Master pipeline function — orchestrates all evidence collection.
-Calls get_location, create_evidence_folder, copy_images_from_esp32, create_metadata, send_alert_async in sequence.
-
-**`get_location(carla_transform)`**
-Reads gps_log.txt first — if GPS age < 120 seconds → GPS_LIVE.
-If GPS older than 2 minutes → GPS_LAST_KNOWN.
-Falls back to CARLA X,Y,Z coordinates if GPS unavailable.
-
-**`send_telegram_alert_with_images(trigger_source, location_data, ...)`**
-Waits 8 seconds (for ESP32 to finish saving images).
-Sends text message → GPS pin (sendLocation) → images (REAR_COLLISION only).
-Writes SENT to telegram_status.txt on success for CARLA HUD acknowledgment.
-
-**`copy_images_from_esp32(images_folder, event_name)`**
-Downloads all 5 images from ESP32-CAM via HTTP GET.
-Saves locally to records/timestamp/images/.
-Returns only img_1 and img_5 paths for Telegram (before + after).
-
-**`create_metadata(base_folder, trigger_source, location_data)`**
-Creates metadata.txt with rider name, vehicle number, timestamp, GPS, trigger source.
-Stored alongside images in evidence folder for forensic reference.
-
-**`send_alert_async()`**
-Wraps send_telegram_alert_with_images in a daemon thread.
-Non-blocking — CARLA simulation continues while alert sends in background.
-
-### Alert Content Per Trigger Source
-| Content | MPU (Fall) | REAR_COLLISION |
+| Content | MPU Fall | Rear Collision |
 |---|---|---|
 | Text message | Yes | Yes |
-| GPS pin | Yes | Yes |
-| Images | No | Yes (img_1 + img_5) |
-| Title | FALL DETECTED | ACCIDENT DETECTED |
-
-### Evidence Folder Structure
-```
-records/
-  2026-03-10_22-56-35/
-    images/
-      img_1.jpg   (before collision)
-      img_2.jpg
-      img_3.jpg
-      img_4.jpg
-      img_5.jpg   (after collision)
-    metadata.txt
-```
+| Live GPS pin | Yes | Yes |
+| Evidence images | No | Yes (img_1 + img_5) |
 
 ---
 
-## IPC (Inter-Process Communication) — FILE BASED
+## IPC Architecture
 
-All modules communicate through shared text files.
-This is the core architecture pattern of the project.
+All modules communicate through shared text files (File-based IPC):
 
 | File | Writer | Reader | Content |
 |---|---|---|---|
-| fall_status.txt | MPU6050/Arduino | Merging_module_3.py | LEFT / RIGHT / NONE |
-| accident_trigger.txt | Rear_Location.py | Merging_module_3.py | ACCIDENT |
-| rear_warning.txt | Rear_Location.py | Merging_module_3.py | WARNING |
-| hotspot_warning.txt | hotspot_detector.py | Merging_module_3.py | WARNING\|count\|dist |
-| gps_log.txt | Rear_Location.py | emergency_alert.py + hotspot_detector.py | timestamp,lat,lng,sats |
-| latest_event.txt | Rear_Location.py | Merging_module_3.py | event folder name |
-| telegram_status.txt | emergency_alert.py | Merging_module_3.py | SENT |
+| `fall_status.txt` | MPU6050/Arduino | Merging_module_3.py | LEFT / RIGHT / NONE |
+| `accident_trigger.txt` | Rear_Location.py | Merging_module_3.py | ACCIDENT |
+| `rear_warning.txt` | Rear_Location.py | Merging_module_3.py | WARNING |
+| `hotspot_warning.txt` | hotspot_detector.py | Merging_module_3.py | WARNING\|count\|dist |
+| `gps_log.txt` | Rear_Location.py | emergency_alert.py | timestamp,lat,lng,sats |
+| `telegram_status.txt` | emergency_alert.py | Merging_module_3.py | SENT |
 
 ---
 
-## TOP 10 MOST IMPORTANT FUNCTIONS
+## Installation
 
-| Rank | Function | File | Why Important |
-|---|---|---|---|
-| 1 | `check_helmet()` | Merging_module_3.py | Core YOLOv8 inference loop |
-| 2 | `AccidentSystem.run()` | Rear_Location.py | Main hardware data loop |
-| 3 | `trigger_accident()` | Merging_module_3.py | Central accident handler |
-| 4 | `log_accident_evidence()` | emergency_alert.py | Master evidence pipeline |
-| 5 | `detect_hotspots()` | hotspot_detector.py | DBSCAN clustering core |
-| 6 | `send_telegram_alert_with_images()` | emergency_alert.py | Alert delivery |
-| 7 | `get_location()` | emergency_alert.py | GPS priority logic |
-| 8 | `haversine_distance()` | hotspot_detector.py | GPS distance calculation |
-| 9 | `analyze_tilt()` | Rear_Location.py | Camera-based tilt verification |
-| 10 | `HotspotMonitor.check_and_warn()` | hotspot_detector.py | Real-time proximity check |
+### Prerequisites
 
----
+- Python 3.7 (strict requirement for CARLA compatibility)
+- CARLA 0.9.10 Simulator
+- Arduino IDE (for hardware code upload)
 
-## INTERVIEW QUESTIONS — PER MODULE
+### Step 1 — Clone the repository
 
-### Helmet Detection
-- Why YOLOv8 over traditional CV methods?
-- What is confidence threshold and why 0.50?
-- What happens if no helmet is detected — does it immediately restrict speed?
-- How does the model handle partial occlusion or bad lighting?
-- What is the difference between precision and recall in your context?
-
-### Tilt Detection
-- How does MPU6050 measure tilt?
-- What is the threshold value and why 10 degrees?
-- Why do you have a 5-second startup delay?
-- What is the difference between MPU detection and camera-based tilt analysis?
-- Which takes priority — MPU or camera?
-
-### Rear Collision Detection
-- Why do you need 3 consecutive readings (CONFIRM_COUNT)?
-- What is the purpose of TRIGGER_COOLDOWN?
-- How does the deque buffer work as a debounce filter?
-- What is the difference between WARNING zone and DANGER zone?
-- Why 9600 baud for Arduino and 115200 for ESP32?
-
-### DBSCAN Hotspot Detection
-- Why DBSCAN over K-Means?
-- What is epsilon and min_samples in your implementation?
-- What is a noise point and how does your system handle it?
-- Why Haversine distance instead of Euclidean?
-- What does Silhouette Score of 0.9879 mean?
-
-### Emergency Alert System
-- Why 8 second delay before sending Telegram alert?
-- How does GPS priority work (LIVE vs LAST_KNOWN)?
-- Why only img_1 and img_5 sent to Telegram?
-- How does CARLA know the alert was sent?
-- What is file-based IPC and why did you use it?
-
----
-
-## COMMON WEAK POINTS — BE PREPARED
-
-| Weakness | Your Answer |
-|---|---|
-| Why file-based IPC instead of sockets? | Simple, cross-process, no network dependency between modules. Works even if one module crashes |
-| What if GPS is unavailable? | Falls back to CARLA simulation coordinates. GPS age check ensures stale data is flagged |
-| What if Telegram API fails? | Alert thread has try/except, failure is logged. CARLA HUD only shows acknowledgment if SENT is written |
-| What if ESP32-CAM is offline? | Images skipped gracefully, alert still sent without images |
-| Is 19 real records enough for DBSCAN? | Supplemented with 80 synthetic records based on real Chennai accident zones. Total 99 records |
-| Why synthetic data? | Real accident data is difficult to collect. Synthetic data follows real geographic distributions |
-
----
-
-## HOW TO RUN THE PROJECT
-
-### Terminal 1 — CARLA Server
 ```bash
-cd D:\softwares\CARLA_0.9.10\WindowsNoEditor
+git clone https://github.com/Banuprasath/RideGuard.git
+cd RideGuard
+```
+
+### Step 2 — Run the installer
+
+```bash
+install.bat
+```
+
+Or manually install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Step 3 — Configure environment
+
+```bash
+copy .env.example .env
+```
+
+Edit `.env` with your values:
+
+```env
+TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_CHAT_ID=your_chat_id
+ARDUINO_PORT=COM16
+ESP32_PORT=COM3
+ESP32_IP=192.168.137.X
+```
+
+### Step 4 — Install CARLA 0.9.10
+
+Download from: https://github.com/carla-simulator/carla/releases/tag/0.9.10
+
+Extract to `C:\CARLA_0.9.10\` then update the path in `Merging_module_3.py` line 21:
+
+```python
+sys.path.append(
+    r"C:\CARLA_0.9.10\WindowsNoEditor\PythonAPI\carla\dist\carla-0.9.10-py3.7-win-amd64.egg"
+)
+```
+
+### Step 5 — YOLOv8 model
+
+The trained `best.pt` model is included in the repository root. No separate download needed.
+
+If you want to retrain the model:
+
+```bash
+python train_helmet.py
+```
+
+---
+
+## Usage
+
+Open 4 terminals and run in order:
+
+```bash
+# Terminal 1 — Start CARLA Server
+cd C:\CARLA_0.9.10\WindowsNoEditor
 CarlaUE4.exe
-```
 
-### Terminal 2 — Main System
-```bash
-cd Live_location
+# Terminal 2 — Main System
+cd RideGuard
 python Merging_module_3.py
-```
 
-### Terminal 3 — Hardware Bridge
-```bash
-cd Live_location
+# Terminal 3 — Hardware Bridge
 python Rear_Location.py
-```
 
-### Terminal 4 — Hotspot Monitor (optional, runs as thread)
-```bash
-cd Live_location
+# Terminal 4 — Hotspot Monitor
 python hotspot_detector.py
 ```
 
-### Terminal 5 — Evaluation Metrics
+### Controls (in CARLA window)
+
+| Key | Action |
+|---|---|
+| W / S | Throttle / Brake |
+| A / D | Steer Left / Right |
+| Arrow Left / Right | Simulate fall direction |
+| 1 | Toggle helmet detection test |
+| 2 | Trigger rear collision sequence |
+| BACKSPACE | Reset after accident |
+| C | Switch camera view |
+| ESC | Quit |
+
+---
+
+## Evaluation
+
+Run evaluation metrics (no hardware required):
+
 ```bash
-cd Live_location
 python evaluation\thesis_evaluation.py
+```
+
+Generates 3 output images in `evaluation/` folder:
+
+| File | Description |
+|---|---|
+| `helmet_confusion_matrix.png` | YOLOv8 confusion matrix |
+| `dbscan_hotspot_clusters.png` | DBSCAN cluster scatter plot |
+| `dbscan_unsupervised_evaluation.png` | Silhouette plot + cluster size chart |
+
+### Overall System Metrics
+
+| Module | Metric | Value |
+|---|---|---|
+| Helmet Detection | Accuracy | 90.00% |
+| Helmet Detection | F1-Score | 0.9020 |
+| Tilt Detection | Success Rate | 92% |
+| Rear Collision | Detection Accuracy | 95% |
+| Emergency Alert | End-to-end Time | 18–21 seconds |
+| DBSCAN Hotspot | Silhouette Score | 0.9879 |
+
+---
+
+## Project Structure
+
+```
+RideGuard/
+├── Merging_module_3.py        # Main CARLA + Helmet + Tilt module
+├── Rear_Location.py           # Hardware bridge (Arduino + GPS + ESP32)
+├── emergency_alert.py         # Telegram alert + evidence logging
+├── hotspot_detector.py        # DBSCAN hotspot detection + monitor
+├── compare_hotspot_algorithms.py  # ML algorithm comparison
+├── test_gps.py                # Neo-6M GPS test utility
+├── train_helmet.py            # YOLOv8 training script
+├── best.pt                    # Trained YOLOv8 helmet detection model
+├── yolov8n.pt                 # YOLOv8 nano base model
+├── accidents.csv              # 99 Chennai GPS accident records
+├── requirements.txt           # Python dependencies
+├── install.bat                # Auto installer for Windows
+├── SETUP_GUIDE.txt            # Manual setup instructions
+├── .env.example               # Environment config template
+├── evaluation/                # Thesis evaluation scripts + charts
+├── Neo-6M_Connections/        # Arduino GPS + Ultrasonic code
+├── Testing_Dataset/           # Test CSVs for evaluation
+├── Thesis/                    # Final year thesis report + viva PDF
+├── utils/                     # Debug and utility scripts
+└── tests/                     # Integration test scripts
 ```
 
 ---
 
-## FINAL SUMMARY — SPEAK IN 1 MINUTE
+## Tech Stack
 
-"Our project is a Motorcycle Accident Detection System with 5 integrated modules.
-
-Module 1 uses YOLOv8 to detect helmet usage via webcam every 5 seconds —
-if no helmet is detected, the rider's speed is limited to 30 km/h in the CARLA simulation.
-
-Module 2 uses an MPU6050 tilt sensor — when the motorcycle tilts beyond 10 degrees,
-it writes LEFT or RIGHT to a shared file, which CARLA reads to trigger a fall animation.
-
-Module 3 uses an HC-SR04 ultrasonic sensor — when a rear vehicle comes within 2 cm
-for 3 consecutive readings, it triggers a rear collision sequence and commands the
-ESP32-CAM to capture 5 images of the incident.
-
-Module 4 uses DBSCAN machine learning on 99 GPS accident records from Chennai —
-it identifies 6 accident hotspot zones and warns the rider in real-time when they
-enter within 2 km of any hotspot.
-
-Module 5 is the emergency alert system — on any accident, it collects GPS location,
-ESP32-CAM images, and rider details, then sends a Telegram alert with a live GPS pin
-and evidence photos within 20 seconds of the accident.
-
-All modules communicate through file-based IPC — shared text files that act as
-signals between processes. The system achieves 90% helmet detection accuracy,
-92% tilt detection success rate, 95% ultrasonic detection accuracy, and a
-Silhouette Score of 0.9879 for hotspot clustering."
+| Category | Technology |
+|---|---|
+| Simulation | CARLA 0.9.10 |
+| Computer Vision | YOLOv8 (Ultralytics) |
+| Machine Learning | DBSCAN (scikit-learn) |
+| Hardware | Arduino Uno, MPU6050, HC-SR04, Neo-6M GPS, ESP32-CAM |
+| Rendering | Pygame |
+| Image Processing | OpenCV |
+| Alert System | Telegram Bot API |
+| Language | Python 3.7 |
+| Data | Pandas, NumPy |
+| Visualization | Matplotlib |
+| Serial Comm | PySerial |
 
 ---
 
-## EVALUATION METRICS SUMMARY
+## Hardware Connections
 
-| Module | Key Metric | Value |
-|---|---|---|
-| Helmet Detection (YOLOv8) | Accuracy | 90.00% |
-| Helmet Detection (YOLOv8) | F1-Score | 0.9020 |
-| Helmet Detection (YOLOv8) | Recall | 92.00% |
-| Tilt Detection (MPU6050) | Success Rate | 92% |
-| Ultrasonic Rear Detection | Accuracy | 95% |
-| Emergency Alert | End-to-end Time | 18-21 seconds |
-| DBSCAN Hotspot | Silhouette Score | 0.9879 |
-| DBSCAN Hotspot | Davies-Bouldin | 0.0165 |
-| DBSCAN Hotspot | Clusters Found | 6 zones |
+### Arduino (COM16, 9600 baud)
+- HC-SR04: TRIG → D9, ECHO → D10
+- Neo-6M GPS: TX → D2, RX → D3
+
+### ESP32-CAM (COM3, 115200 baud)
+- Receives CAPTURE command via serial
+- Serves images via HTTP at `http://ESP32_IP/image`
 
 ---
 
-*Generated for Final Year Project Code Review — MCA Semester 4*
+## Thesis & Documentation
+
+The full project thesis and viva presentation are available in the `Thesis/` folder:
+
+| File | Description |
+|---|---|
+| `Thesis/Final_year_report_Banu_Prasath_crt (1).pdf` | Complete project thesis report |
+| `Thesis/Banu-Prasath_S_Final_Viva.pdf` | Final viva presentation slides |
+
+---
+
+## Author
+
+**Banuprasath S**
+MCA Final Year — Semester 4
+GitHub: [@Banuprasath](https://github.com/Banuprasath)
+Repository: [RideGuard](https://github.com/Banuprasath/RideGuard)
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+<div align="center">
+Built with dedication for Final Year Project — MCA Semester 4
+</div>
